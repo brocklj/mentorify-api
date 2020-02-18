@@ -1,0 +1,11 @@
+{
+  "name": "mentorify-api",
+  "version": "1.0.0",
+  "description": "Education Support Platform API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jakub Bröckl",
+  "license": "ISC"
+}
