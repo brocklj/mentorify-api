@@ -1,5 +1,5 @@
-const { ApolloServer, gql } = require("apollo-server");
-const dotenv = require("dotenv");
+const { ApolloServer, gql } = require('apollo-server');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -15,19 +15,19 @@ const typeDefs = gql`
 
 const books = [
   {
-    title: "Harry Potter and the Chamber of Secrets",
-    author: "J.K. Rowling",
+    title: 'Harry Potter and the Chamber of Secrets',
+    author: 'J.K. Rowling'
   },
   {
-    title: "Jurassic Park",
-    author: "Michael Crichton",
-  },
+    title: 'Jurassic Park',
+    author: 'Michael Crichton'
+  }
 ];
 
 const resolvers = {
   Query: {
-    books: () => books,
-  },
+    books: () => books
+  }
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
