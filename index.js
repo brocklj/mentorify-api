@@ -1,5 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server');
 const dotenv = require('dotenv');
+const mongo = require('mongodb');
 
 dotenv.config();
 
@@ -29,6 +30,9 @@ const resolvers = {
     books: () => books
   }
 };
+
+const MongoClient = mongo.MongoClient;
+MongoClient.connect(process.env.MONGODB_URI);
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
