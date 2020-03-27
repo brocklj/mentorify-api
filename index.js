@@ -1,41 +1,31 @@
-const { ApolloServer, gql } = require('apollo-server');
 const dotenv = require('dotenv');
-const mongo = require('mongodb');
+const db = require('./db');
+const express = require('express');
+const ApolloServer = require('./ApolloServer');
 
+// Start epxress app
+const app = express();
+
+// .env configuration
 dotenv.config();
 
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-  type Query {
-    books: [Book]
-  }
-`;
+// Database configuration
+db.config();
 
-const books = [
-  {
-    title: 'Harry Potter and the Chamber of Secrets',
-    author: 'J.K. Rowling'
-  },
-  {
-    title: 'Jurassic Park',
-    author: 'Michael Crichton'
-  }
-];
+app.use('/', (req, res, next) => {
+  console.log(`${new Date().toUTCString()} ${req.method}:${req.url}`);
+  next();
+});
 
-const resolvers = {
-  Query: {
-    books: () => books
-  }
-};
+// TODO Auth logic To Sign In and Sign Up
 
-const MongoClient = mongo.MongoClient;
-MongoClient.connect(process.env.MONGODB_URI);
+// Apply ApolloServer middleware
+ApolloServer.applyMiddleware({ app });
 
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen(process.env.PORT).then(({ url }) => {
-  console.log(`Server is listening on: ${url}`);
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Server is listening on: http://localhost:${PORT}`);
+  console.log(
+    `ApolloServer is listening on: http://localhost:${PORT}${ApolloServer.graphqlPath}`
+  );
 });
