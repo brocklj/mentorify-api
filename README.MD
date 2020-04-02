@@ -1,1 +1,1 @@
-# Mentorify React Native API
+# Mentorify GraphQL / REST API
