@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const db = require('./db/mongo-client');
 const ApolloServer = require('./ApolloServer');
 const AuthService = require('./service/AuthService');
+const mongoose = require('mongoose');
 
 try {
   (async () => {
@@ -13,6 +14,8 @@ try {
 
     // Database configuration
     await db.config();
+    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+
     // Start epxress app
     const app = express();
 
