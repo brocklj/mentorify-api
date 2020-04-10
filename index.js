@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const db = require('./db/mongo-client');
 const ApolloServer = require('./ApolloServer');
@@ -19,6 +20,7 @@ try {
     // Start epxress app
     const app = express();
 
+    app.use(cors());
     app.use(bodyParser.json());
     app.use(bodyParser.text({ type: 'text/html' }));
     app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }));
