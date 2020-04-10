@@ -15,7 +15,11 @@ try {
 
     // Database configuration
     await db.config();
-    await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      dbName: process.env.MONGODB_NAME,
+    });
 
     // Start epxress app
     const app = express();
