@@ -5,8 +5,13 @@ const cors = require('cors');
 
 const db = require('./db/mongo-client');
 const ApolloServer = require('./ApolloServer');
-const AuthService = require('./service/AuthService');
+const AuthService = require('./services/AuthService');
 const mongoose = require('mongoose');
+
+const CORS_CONFIG = {
+  credentials: true,
+  origin: process.env.CLIENT_URL || '*',
+};
 
 try {
   (async () => {
@@ -24,7 +29,7 @@ try {
     // Start epxress app
     const app = express();
 
-    app.use(cors());
+    app.use(cors(CORS_CONFIG));
     app.use(bodyParser.json());
     app.use(bodyParser.text({ type: 'text/html' }));
     app.use(bodyParser.raw({ type: 'application/vnd.custom-type' }));
@@ -41,7 +46,10 @@ try {
     app.post('/register', AuthService.register);
 
     // Apply ApolloServer middleware
-    ApolloServer.applyMiddleware({ app });
+    ApolloServer.applyMiddleware({
+      app,
+      cors: CORS_CONFIG,
+    });
 
     const PORT = process.env.PORT;
     app.listen(PORT, () => {
@@ -53,5 +61,5 @@ try {
   })();
 } catch (error) {
   console.error(error);
-  app.user('/', (req, res) => res.code(500).json({ message: error.message }));
+  app.use('/', (req, res) => res.status(500).json({ message: error.message }));
 }
