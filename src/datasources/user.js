@@ -16,6 +16,10 @@ class UserAPI extends DataSource {
       return await User.findOne({ email });
     }
   }
+
+  async findCommonInterestUsers() {
+    return await User.find();
+  }
 }
 
 module.exports = UserAPI;

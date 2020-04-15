@@ -42,4 +42,12 @@ async function signIn(req, res) {
   }
 }
 
-module.exports = { register, signIn, verify };
+async function resetPassword(req, res) {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ message: 'User does not exist!' });
+  }
+}
+
+module.exports = { register, signIn, verify, resetPassword };

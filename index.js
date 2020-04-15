@@ -42,8 +42,8 @@ try {
 
     // TODO Auth logic To Sign In and Sign Up
     app.post('/auth', AuthService.signIn);
-
     app.post('/register', AuthService.register);
+    app.post('/reset-password', AuthService.resetPassword);
 
     // Apply ApolloServer middleware
     ApolloServer.applyMiddleware({
