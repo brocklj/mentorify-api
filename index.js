@@ -2,11 +2,12 @@ const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const db = require('./db/mongo-client');
 const ApolloServer = require('./ApolloServer');
 const AuthService = require('./services/AuthService');
-const mongoose = require('mongoose');
+const MailService = require('./services/MailService');
 
 const CORS_CONFIG = {
   credentials: true,
@@ -17,6 +18,8 @@ try {
   (async () => {
     // .env configuration
     dotenv.config();
+
+    MailService.config();
 
     // Database configuration
     await db.config();
@@ -39,11 +42,15 @@ try {
       console.log(`${new Date().toUTCString()} ${req.method}:${req.url}`);
       next();
     });
-
-    // TODO Auth logic To Sign In and Sign Up
-    app.post('/auth', AuthService.signIn);
-    app.post('/register', AuthService.register);
-    app.post('/reset-password', AuthService.resetPassword);
+    try {
+      // TODO Auth logic To Sign In and Sign Up
+      app.post('/auth', AuthService.signIn);
+      app.post('/register', AuthService.register);
+      app.post('/reset-password', AuthService.resetPassword);
+      app.post('/set-new-password', AuthService.setNewPassword);
+    } catch (error) {
+      app.response.status(500);
+    }
 
     // Apply ApolloServer middleware
     ApolloServer.applyMiddleware({
@@ -61,5 +68,5 @@ try {
   })();
 } catch (error) {
   console.error(error);
-  app.use('/', (req, res) => res.status(500).json({ message: error.message }));
+  app.response.status(500).json({ message: error.message });
 }
