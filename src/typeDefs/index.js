@@ -11,6 +11,9 @@ const typeDefs = gql`
 
   type Mutation {
     updateActualUser(user: ActualUserInput): String
+    toggleUserConnection(userId: String): String
+    connectUser(userId: String!): User
+    disconnectUser(userId: String!): User
   }
 
   input ActualUserInput {
