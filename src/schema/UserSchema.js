@@ -8,10 +8,11 @@ const UserSchema = new Schema(
     name: String,
     email: { type: String, lowercase: true, unique: true, required: true },
     hash: String,
-    connectedUsers: [{ type: Schema.ObjectId, ref: 'User', unique: true }],
     isVerified: { type: Boolean, default: false },
     createdAt: Number,
     updatedAt: Number,
+    connectedUsers: [{ type: Schema.ObjectId, ref: 'User' }],
+    interests: [{ type: Schema.ObjectId, ref: 'Interest', unique: true }],
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
@@ -23,6 +24,7 @@ const UserTypeDef = gql`
     name: String
     email: String
     connectedUsers: [User]
+    interests: [Interest]
     isVerified: Boolean
     createdAt: String
     updatedAt: String
