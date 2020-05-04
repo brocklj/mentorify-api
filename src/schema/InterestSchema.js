@@ -8,6 +8,7 @@ const InterestSchema = new Schema(
       type: String,
       required: true,
       index: { unique: true },
+      unique: true,
       lowercase: true,
     },
     createdAt: Number,

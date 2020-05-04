@@ -30,7 +30,9 @@ class UserAPI extends DataSource {
   }
 
   async findCommonInterestUsers() {
-    return await User.find().populate('interests');
+    const { email } = this.context.user;
+
+    return await User.find().where('email').ne(email).populate('interests');
   }
 
   async connect(userId) {
@@ -60,8 +62,13 @@ class UserAPI extends DataSource {
 
   async addInterest(name) {
     const me = await this.find();
+    await me.depopulate('interests');
+
     const interest = await Interest.findOne({ name });
     if (interest) {
+      if (me.interests.includes(interest._id)) {
+        throw new UserInputError('Item is already in the set!');
+      }
       me.interests.push(interest);
       await me.save();
       return interest;

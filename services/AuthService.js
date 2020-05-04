@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const yup = require('yup');
+
 const { User } = require('../src/models');
 const MailService = require('./MailService');
 
@@ -11,7 +13,13 @@ function generatePasswordSalt(password) {
 }
 
 async function register(req, res) {
-  const { email, name, password } = req.body;
+  const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().min(8).required(),
+    name: yup.string().min(2).required(),
+  });
+
+  const { email, name, password } = await schema.validate(req.body);
 
   const user = await User.findOne({ email });
   if (user) {
