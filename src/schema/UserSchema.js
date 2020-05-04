@@ -12,7 +12,7 @@ const UserSchema = new Schema(
     createdAt: Number,
     updatedAt: Number,
     connectedUsers: [{ type: Schema.ObjectId, ref: 'User' }],
-    interests: [{ type: Schema.Types.ObjectId, ref: 'Interest', unique: true }],
+    interests: [{ type: Schema.ObjectId, ref: 'Interest' }],
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
