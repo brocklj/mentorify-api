@@ -26,7 +26,7 @@ const typeDefs = gql`
     addInterest(name: String): Interest
     removeInterest(id: String): Interest
 
-    sendMessage(recipients: [String], text: String!): String!
+    sendMessage(recipients: [String], text: String!): Message
   }
 
   input ActualUserInput {
