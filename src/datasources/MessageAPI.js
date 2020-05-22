@@ -13,24 +13,20 @@ class MessageAPI extends DataSource {
   async getMessagesFrom(recipients) {
     const me = await this.context.dataSources.userAPI.getMe();
 
-    const withMe = recipients.slice(0, 0).push(me._id);
-    const messagesFrom = await Message.find()
-      .where('recipients')
-      .in(recipients)
-      .where('author')
-      .equals(me)
-      .populate('recipients')
-      .populate('author');
+    const withMe = recipients.concat([me._id]);
 
-    const messagesTo = await Message.find()
-      .where('recipients')
-      .in(withMe)
-      .where('author')
-      .in(recipients)
-      .populate('recipients')
-      .populate('author');
+    const messagesFrom = await Message.find({
+      $or: [
+        { recipients: { $in: recipients }, author: me },
+        { author: { $in: recipients }, recipients: { $in: withMe } },
+      ],
+    })
+      .populate('author')
+      .populate('recipients');
 
-    return messagesFrom.concat(messagesTo);
+    console.log(messagesFrom);
+
+    return messagesFrom;
   }
 
   async onSendMessage(recipients, text) {

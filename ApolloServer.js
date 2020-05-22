@@ -10,11 +10,12 @@ const server = new ApolloServer({
   resolvers,
   dataSources,
   context: ({ req }) => {
-    const token =
-      (req.headers.authorization &&
-        req.headers.authorization.replace('Bearer ', '')) ||
-      '';
     try {
+      const token =
+        (req.headers.authorization &&
+          req.headers.authorization.replace('Bearer ', '')) ||
+        '';
+
       const user = authService.verify(token);
 
       return { user };
