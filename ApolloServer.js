@@ -24,6 +24,10 @@ const server = new ApolloServer({
       throw new AuthenticationError('Authentication error');
     }
   },
+  formatError: (error) => {
+    console.log(error);
+    return error;
+  },
 });
 
 module.exports = server;

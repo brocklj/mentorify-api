@@ -2,6 +2,7 @@ const gql = require('graphql-tag');
 const { UserTypeDef } = require('../schema/UserSchema');
 const { InterestTypeDef } = require('../schema/InterestSchema');
 const { MessageTypeDef } = require('../schema/MessageSchema');
+const { ConversationTypeDef } = require('../schema/ConversationSchema');
 
 const typeDefs = gql`
   ${UserTypeDef}
@@ -10,11 +11,14 @@ const typeDefs = gql`
 
   ${MessageTypeDef}
 
+  ${ConversationTypeDef}
+
   type Query {
     me: User
     connectedUsers: [User]
     communityUsers: [User]
     getMessagesFrom(recipients: [String]): [Message]
+    getConversations: [Conversation]
   }
 
   type Mutation {

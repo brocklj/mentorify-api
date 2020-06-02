@@ -20,7 +20,7 @@ const UserSchema = new Schema(
 // GraphQL Type definition
 const UserTypeDef = gql`
   type User {
-    id: String
+    id: ID
     name: String
     email: String
     connectedUsers: [User]

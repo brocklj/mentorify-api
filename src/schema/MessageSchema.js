@@ -4,9 +4,13 @@ const gql = require('graphql-tag');
 const Schema = mongoose.Schema;
 const MessageSchema = new Schema(
   {
-    author: { type: Schema.ObjectId, ref: 'User' },
-    recipients: [{ type: Schema.ObjectId, ref: 'User' }],
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
     text: String,
+    conversation: {
+      type: Schema.Types.ObjectId,
+      ref: 'Conversation',
+      required: true,
+    },
     createdAt: Number,
     updatedAt: Number,
   },
@@ -16,10 +20,10 @@ const MessageSchema = new Schema(
 
 const MessageTypeDef = gql`
   type Message {
-    id: String
+    id: ID
     author: User
-    recipients: [User]
     text: String
+    conversation: Conversation
     createdAt: String
     updatedAt: String
   }

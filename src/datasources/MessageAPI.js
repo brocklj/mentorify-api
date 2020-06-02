@@ -11,27 +11,31 @@ class MessageAPI extends DataSource {
   }
   // Get messages from the recipients including current users' messages
   async getMessagesFrom(recipients) {
-    const me = await this.context.dataSources.userAPI.getMe();
+    const conversation = await this.context.dataSources.conversationAPI.getOrCreateForRecipients(
+      recipients
+    );
 
-    const withMe = recipients.concat([me._id]);
-
-    const messagesFrom = await Message.find({
-      $or: [
-        { recipients: { $in: recipients }, author: me },
-        { author: { $in: recipients }, recipients: { $in: withMe } },
-      ],
-    })
+    const messagesFrom = await Message.find()
+      .where('conversation')
+      .equals(conversation)
       .populate('author')
-      .populate('recipients');
+      .sort({ createdAt: 'desc' })
+      .limit(10);
 
-    console.log(messagesFrom);
-
-    return messagesFrom;
+    return messagesFrom.reverse();
   }
 
-  async onSendMessage(recipients, text) {
+  async sendMessage(recipients, text) {
     const author = await this.context.dataSources.userAPI.getMe();
-    const message = new Message({ text, recipients, author });
+    const conversation = await this.context.dataSources.conversationAPI.getOrCreateForRecipients(
+      recipients
+    );
+    const message = new Message({ text, author });
+    message.conversation = conversation;
+
+    conversation.messages.push(message);
+
+    await conversation.save();
 
     const savedMessage = await (await message.save())
       .populate('recipients')
