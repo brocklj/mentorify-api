@@ -10,9 +10,12 @@ class MessageAPI extends DataSource {
     this.context = context;
   }
   // Get messages from the recipients including current users' messages
-  async getMessagesFrom(recipients) {
-    const conversation = await this.context.dataSources.conversationAPI.getOrCreateForRecipients(
-      recipients
+  async getMessages(conversationId, recipients) {
+    const conversation = await this.context.dataSources.conversationAPI.getOrCreateConversation(
+      {
+        conversationId,
+        recipients,
+      }
     );
 
     const messagesFrom = await Message.find()
@@ -25,10 +28,13 @@ class MessageAPI extends DataSource {
     return messagesFrom.reverse();
   }
 
-  async sendMessage(recipients, text) {
+  async sendMessage(conversationId, recipients, text) {
     const author = await this.context.dataSources.userAPI.getMe();
-    const conversation = await this.context.dataSources.conversationAPI.getOrCreateForRecipients(
-      recipients
+    const conversation = await this.context.dataSources.conversationAPI.getOrCreateConversation(
+      {
+        conversationId,
+        recipients,
+      }
     );
     const message = new Message({ text, author });
     message.conversation = conversation;

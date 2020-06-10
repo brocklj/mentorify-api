@@ -17,7 +17,7 @@ const typeDefs = gql`
     me: User
     connectedUsers: [User]
     communityUsers: [User]
-    getMessagesFrom(recipients: [String]): [Message]
+    getMessages(conversationId: ID, recipients: [ID]): [Message]
     getConversations: [Conversation]
   }
 
@@ -30,7 +30,7 @@ const typeDefs = gql`
     addInterest(name: String): Interest
     removeInterest(id: String): Interest
 
-    sendMessage(recipients: [String], text: String!): Message
+    sendMessage(conversationId: ID, recipients: [ID], text: String!): Message
   }
 
   input ActualUserInput {

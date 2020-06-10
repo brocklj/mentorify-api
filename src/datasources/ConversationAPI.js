@@ -13,19 +13,31 @@ class ConversationAPI extends DataSource {
     const me = await this.context.dataSources.userAPI.getMe();
     const conversations = await Conversation.find({ users: me._id })
       .populate('messages')
-      .populate('users');
+      .populate({
+        path: 'users',
+        match: { _id: { $ne: me._id } },
+      });
 
     return conversations;
   }
 
-  async getOrCreateForRecipients(recipients) {
-    console.log(recipients);
+  async getOrCreateConversation({ conversationId, recipients }) {
     const me = await this.context.dataSources.userAPI.getMe();
-    recipients.push(me._id);
 
-    const conversation = await Conversation.findOne({
-      users: { $all: recipients, $size: recipients.length },
-    });
+    let conversation;
+
+    if (recipients) {
+      recipients.push(me._id);
+      conversation = await Conversation.findOne({
+        users: { $all: recipients, $size: recipients.length },
+      });
+    }
+
+    if (conversationId) {
+      conversation = await Conversation.findOne({
+        _id: conversationId,
+      });
+    }
 
     if (!conversation) {
       const newConversation = new Conversation({
@@ -35,9 +47,8 @@ class ConversationAPI extends DataSource {
       await newConversation.save();
 
       return newConversation;
-    } else {
-      return conversation;
     }
+    return conversation;
   }
 }
 
