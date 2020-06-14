@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const mongoose = require('./db/mongoose');
 
 const db = require('./db/mongo-client');
 const ApolloServer = require('./ApolloServer');
@@ -23,11 +23,7 @@ const CORS_CONFIG = {
 
   // Database configuration
   await db.config();
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: process.env.MONGODB_NAME,
-  });
+  await mongoose.config();
 
   // Start epxress app
   const app = express();

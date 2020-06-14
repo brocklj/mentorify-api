@@ -15,22 +15,29 @@ const typeDefs = gql`
 
   type Query {
     me: User
-    connectedUsers: [User]
+    meConnectedUsers: [User]
+
+    user(userId: ID!): User
     communityUsers: [User]
-    getMessages(conversationId: ID, recipients: [ID]): [Message]
-    getConversations: [Conversation]
+
+    messages(conversationId: ID, recipients: [ID]): [Message]
+    messagesUnreadCount: Int
+
+    conversations: [Conversation]
   }
 
   type Mutation {
-    updateActualUser(user: ActualUserInput): String
-    toggleUserConnection(userId: String): String
-    connectUser(userId: String!): User
-    disconnectUser(userId: String!): User
+    meUpdate(userInput: ActualUserInput): String
+    meAddInterest(name: String): Interest
+    meRemoveInterest(id: String): Interest
+    meConnectUser(userId: String!): User
+    meDisconnectUser(userId: String!): User
 
-    addInterest(name: String): Interest
-    removeInterest(id: String): Interest
+    createConversation(recipients: [ID!]): Conversation
+    updateConversation(input: ConversationInput!): Conversation
+    markConversationAsRead(id: ID!): Conversation
 
-    sendMessage(conversationId: ID, recipients: [ID], text: String!): Message
+    createMessage(conversationId: ID, recipients: [ID], text: String!): Message
   }
 
   input ActualUserInput {

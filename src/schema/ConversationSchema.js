@@ -15,7 +15,7 @@ const ConversationSchema = new Schema(
         required: true,
       },
     ],
-    readByUserIds: [{ type: Schema.Types.String }],
+    readByIds: { type: [String], default: [] },
     createdAt: Number,
     updatedAt: Number,
   },
@@ -31,6 +31,11 @@ const ConversationTypeDef = gql`
     readByIds: [String]
     createdAt: String
     updatedAt: String
+  }
+
+  input ConversationInput {
+    id: ID!
+    readByIds: [String]
   }
 `;
 

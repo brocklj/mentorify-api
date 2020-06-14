@@ -1,6 +1,6 @@
 const { UserInputError } = require('apollo-server-express');
 const { DataSource } = require('apollo-datasource');
-const { Message } = require('../models');
+const { Message, Conversation } = require('../models');
 
 class MessageAPI extends DataSource {
   constructor() {
@@ -22,13 +22,28 @@ class MessageAPI extends DataSource {
       .where('conversation')
       .equals(conversation)
       .populate('author')
+      .populate('conversation')
       .sort({ createdAt: 'desc' })
       .limit(10);
 
     return messagesFrom.reverse();
   }
 
-  async sendMessage(conversationId, recipients, text) {
+  async getUreadCount() {
+    const me = await this.context.dataSources.userAPI.getMe();
+    const conversations = await this.context.dataSources.conversationAPI.getConversations();
+    const count = conversations.reduce((acc, c) => {
+      if (!c.readByIds.find((id) => id == me._id)) {
+        return acc + 1;
+      } else {
+        return acc;
+      }
+    }, 0);
+
+    return count;
+  }
+
+  async createMessage(conversationId, recipients, text) {
     const author = await this.context.dataSources.userAPI.getMe();
     const conversation = await this.context.dataSources.conversationAPI.getOrCreateConversation(
       {
@@ -40,6 +55,7 @@ class MessageAPI extends DataSource {
     message.conversation = conversation;
 
     conversation.messages.push(message);
+    conversation.readByIds = [author.id];
 
     await conversation.save();
 

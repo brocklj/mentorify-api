@@ -17,7 +17,7 @@ class UserAPI extends DataSource {
 
   async find({ id, email } = {}) {
     if (id) {
-      return await User.findOne({ _id: id });
+      return await User.findOne({ _id: id }).populate('interests');
     } else {
       return await this.getMe();
     }

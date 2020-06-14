@@ -50,6 +50,24 @@ class ConversationAPI extends DataSource {
     }
     return conversation;
   }
+
+  async updateConversation(input) {
+    const conversation = await Conversation.findOne({ _id: input.id });
+    conversation.readByIds = input.readByIds;
+
+    return conversation;
+  }
+
+  async markAsRead(id) {
+    const me = await this.context.dataSources.userAPI.getMe();
+    const conversation = await Conversation.findOne({ _id: id });
+    if (!conversation.readByIds.includes(me._id)) {
+      conversation.readByIds.push(me._id);
+      await conversation.save();
+    }
+
+    return conversation;
+  }
 }
 
 module.exports = ConversationAPI;

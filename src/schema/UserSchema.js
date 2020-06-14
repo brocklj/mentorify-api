@@ -11,8 +11,8 @@ const UserSchema = new Schema(
     isVerified: { type: Boolean, default: false },
     createdAt: Number,
     updatedAt: Number,
-    connectedUsers: [{ type: Schema.ObjectId, ref: 'User' }],
-    interests: [{ type: Schema.ObjectId, ref: 'Interest' }],
+    connectedUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    interests: [{ type: Schema.Types.ObjectId, ref: 'Interest' }],
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );

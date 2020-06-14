@@ -1,19 +1,23 @@
 const UserResolver = {
   query: {
     me: (_, __, { dataSources }) => dataSources.userAPI.find(),
+    meConnectedUsers: (_, __, { dataSources }) =>
+      dataSources.userAPI.findConnectedUsers(),
     communityUsers: (_, __, { dataSources }) =>
       dataSources.userAPI.findCommonInterestUsers(),
-    connectedUsers: (_, __, { dataSources }) =>
-      dataSources.userAPI.findConnectedUsers(),
+    user: (_, { userId }, { dataSources, ...rest }) => {
+      return dataSources.userAPI.find({ id: userId });
+    },
   },
   mutation: {
-    connectUser: (_, { userId }, { dataSources }) =>
+    meUpdate: () => {},
+    meConnectUser: (_, { userId }, { dataSources }) =>
       dataSources.userAPI.connect(userId),
-    disconnectUser: (_, { userId }, { dataSources }) =>
+    meDisconnectUser: (_, { userId }, { dataSources }) =>
       dataSources.userAPI.disconnect(userId),
-    addInterest: (_, { name }, { dataSources }) =>
+    meAddInterest: (_, { name }, { dataSources }) =>
       dataSources.userAPI.addInterest(name),
-    removeInterest: (_, { id }, { dataSources }) =>
+    meRemoveInterest: (_, { id }, { dataSources }) =>
       dataSources.userAPI.removeInterest(id),
   },
 };

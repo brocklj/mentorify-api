@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const InterestSchema = new Schema(
   {
     name: {
-      type: String,
+      type: Schema.Types.String,
       required: true,
       index: { unique: true },
       unique: true,
@@ -19,7 +19,7 @@ const InterestSchema = new Schema(
 
 const InterestTypeDef = gql`
   type Interest {
-    id: String
+    id: ID
     name: String
     createdAt: String
     updatedAt: String

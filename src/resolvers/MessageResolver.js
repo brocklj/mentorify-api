@@ -1,13 +1,14 @@
 const MessageResolver = {
   query: {
-    getConversations: (_, __, { dataSources }) =>
-      dataSources.conversationAPI.getConversations(),
-    getMessages: (_, { conversationId, recipients }, { dataSources }) =>
+    messages: (_, { conversationId, recipients }, { dataSources }) =>
       dataSources.messageAPI.getMessages(conversationId, recipients),
+
+    messagesUnreadCount: (_, __, { dataSources }) =>
+      dataSources.messageAPI.getUreadCount(),
   },
   mutation: {
-    sendMessage: (_, { conversationId, recipients, text }, { dataSources }) =>
-      dataSources.messageAPI.sendMessage(conversationId, recipients, text),
+    createMessage: (_, { conversationId, recipients, text }, { dataSources }) =>
+      dataSources.messageAPI.createMessage(conversationId, recipients, text),
   },
 };
 
