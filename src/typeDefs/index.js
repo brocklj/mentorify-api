@@ -33,8 +33,8 @@ const typeDefs = gql`
     meConnectUser(userId: String!): User
     meDisconnectUser(userId: String!): User
 
-    createConversation(recipients: [ID!]): Conversation
-    updateConversation(input: ConversationInput!): Conversation
+    createConversation(input: ConversationCreateInput!): Conversation
+    updateConversation(input: ConversationUpdateInput!): Conversation
     markConversationAsRead(id: ID!): Conversation
 
     createMessage(conversationId: ID, recipients: [ID], text: String!): Message

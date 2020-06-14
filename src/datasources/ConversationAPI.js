@@ -9,6 +9,30 @@ class ConversationAPI extends DataSource {
   initialize({ context }) {
     this.context = context;
   }
+
+  async createConversation(input) {
+    const me = await this.context.dataSources.userAPI.getMe();
+    input.users.push(me._id);
+    if (!input.name) {
+      input.name = `Group created by ${me.name}`;
+    }
+
+    let conversation;
+
+    if (input.users.length > 2) {
+      conversation = new Conversation(input);
+    } else {
+      conversation = await this.getOrCreateConversation({
+        recipients: input.users,
+      });
+    }
+
+    conversation.readByIds.push(me._id);
+    await conversation.save();
+
+    return conversation;
+  }
+
   async getConversations() {
     const me = await this.context.dataSources.userAPI.getMe();
     const conversations = await Conversation.find({ users: me._id })

@@ -4,8 +4,8 @@ const ConversationResolver = {
       dataSources.conversationAPI.getConversations(),
   },
   mutation: {
-    createConversation: (_, __, { dataSources }) =>
-      dataSources.conversationAPI.createConversation(),
+    createConversation: (_, { input }, { dataSources }) =>
+      dataSources.conversationAPI.createConversation(input),
     updateConversation: (_, { input }, { dataSources }) =>
       dataSources.conversationAPI.updateConversation(input),
     markConversationAsRead: (_, { id }, { dataSources }) =>

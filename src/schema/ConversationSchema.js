@@ -33,8 +33,14 @@ const ConversationTypeDef = gql`
     updatedAt: String
   }
 
-  input ConversationInput {
+  input ConversationCreateInput {
+    name: String
+    users: [ID!]
+  }
+
+  input ConversationUpdateInput {
     id: ID!
+    name: String
     readByIds: [String]
   }
 `;
