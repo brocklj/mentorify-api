@@ -40,7 +40,8 @@ class ConversationAPI extends DataSource {
       .populate({
         path: 'users',
         match: { _id: { $ne: me._id } },
-      });
+      })
+      .sort('-updatedAt');
 
     return conversations;
   }
