@@ -24,7 +24,7 @@
     "mongodb": "^3.5.3",
     "mongoose": "^5.9.7",
     "nodemailer": "^6.4.6",
-    "validator": "^13.0.0",
+    "validator": "^13.7.0",
     "yup": "^0.28.3"
   },
   "devDependencies": {
